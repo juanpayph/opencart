@@ -20,7 +20,7 @@ How To Install JuanPay Plugin for OpenCart
 14. Under DPN URL put this value http://yourstore/index.php?route=payment/juanpay_standard/callback
     * change yourstore to your actual store address
 
-You Done!
+Your Done!
 
 
 Happy Coding!!!
