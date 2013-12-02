@@ -5,7 +5,7 @@ $_['heading_title']					 = 'JuanPay Standard';
 // Text
 $_['text_payment']					 = 'Payment';
 $_['text_success']					 = 'Success: You have modified JuanPay account details!';
-$_['text_juanpay_standard']				 = '<a onclick="window.open(\'https://www.juanpay.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/image/payment/juanpay.png" alt="JuanPay Payments Standard" title="JuanPay Payments Standard" style="border: 1px solid #EEEEEE;" /></a>';
+$_['text_juanpay_standard']				 = '<a onclick="window.open(\'https://www.juanpay.ph/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/image/payment/juanpay.png" alt="JuanPay Payments Standard" title="JuanPay Payments Standard" style="border: 1px solid #EEEEEE;" /></a>';
 
 // Entry
 $_['entry_email']					 = 'JuanPay Account E-Mail:';

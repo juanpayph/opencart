@@ -30,9 +30,9 @@ class ControllerPaymentJuanPayStandard extends Controller {
 		$this->data['testmode'] = $this->config->get('juanpay_standard_test');
 		
 		if (!$this->config->get('juanpay_standard_test')) {
-    		$this->data['action'] = 'https://www.juanpay.com/cgi-bin/webscr';
+    		$this->data['action'] = 'https://www.juanpay.ph/checkout';
   		} else {
-			$this->data['action'] = 'http://localhost:3000/checkout';
+			$this->data['action'] = 'https://sandbox.juanpay.ph/checkout';
 		}
 
 
@@ -120,9 +120,9 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			}
 			
 			if (!$this->config->get('juanpay_standard_test')) {
-				$curl = curl_init('https://www.juanpay.com/cgi-bin/webscr');
+				$curl = curl_init('https://www.juanpay.ph/dpn/validate');
 			} else {
-				$curl = curl_init('http://localhost:3000/dpn/validate');
+				$curl = curl_init('https://sandbox.juanpay.ph/dpn/validate');
 			}
 
 			curl_setopt($curl, CURLOPT_POST, true);
