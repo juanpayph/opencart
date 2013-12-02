@@ -11,6 +11,8 @@
   <input type="hidden" name="qty_<?php echo $i; ?>" value="<?php echo $product['quantity']; ?>" />
   <?php $i++; ?>
   <?php } ?>
+  <input type="hidden" name="otherchargeamount" value="<?php echo $other_fees_amt; ?>" />
+  <input type="hidden" name="otherchargename" value="<?php echo $other_fees_name; ?>" />
   <input type="hidden" name="buyer_first_name" value="<?php echo $first_name; ?>" />
   <input type="hidden" name="buyer_last_name" value="<?php echo $last_name; ?>" />
   <input type="hidden" name="buyer_cell_number" value="<?php echo $telephone; ?>" />

@@ -32,7 +32,9 @@ class ControllerPaymentJuanPayStandard extends Controller {
 		if (!$this->config->get('juanpay_standard_test')) {
     		$this->data['action'] = 'https://www.juanpay.ph/checkout';
   		} else {
-			$this->data['action'] = 'https://sandbox.juanpay.ph/checkout';
+			//$this->data['action'] = 'https://sandbox.juanpay.ph/checkout';
+			$this->data['action'] = 'http://localhost:3000/checkout';
+
 		}
 
 
@@ -44,7 +46,7 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			$this->data['business'] = $this->config->get('juanpay_standard_email');
    		        $md5HashData .= $this->data['business'];
 			$this->data['products'] = array();
-			
+			$product_total = 0;
 			foreach ($this->cart->getProducts() as $product) {
 				$price = $this->currency->format($product['price'], $order_info['currency_code'], false, false);				
 				$this->data['products'][] = array(
@@ -52,12 +54,19 @@ class ControllerPaymentJuanPayStandard extends Controller {
 					'price'    => $price,
 					'quantity' => $product['quantity']
 				);
+                                $product_total = $product_total + ($product['quantity'] * $price);
       		                $md5HashData .= $product['name'];
       		                $md5HashData .= $price;
       		                $md5HashData .= $product['quantity'];
 
 			}	
-			
+			$order_total = $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false);	
+			if ($order_total<>$product_total) {
+                            $this->data['other_fees_amt'] = $order_total - $product_total;	
+                            $this->data['other_fees_name'] = "Other Fees";
+			    $md5HashData .= $this->data['other_fees_amt'];
+                            $md5HashData .= $this->data['other_fees_name'];
+			}
 			$this->data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');	
       		        $md5HashData .= $this->data['first_name'];
 			$this->data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');	
@@ -122,7 +131,8 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			if (!$this->config->get('juanpay_standard_test')) {
 				$curl = curl_init('https://www.juanpay.ph/dpn/validate');
 			} else {
-				$curl = curl_init('https://sandbox.juanpay.ph/dpn/validate');
+				$curl = curl_init('http://localhost:3000/dpn/validate');
+				//$curl = curl_init('https://sandbox.juanpay.ph/dpn/validate');
 			}
 
 			curl_setopt($curl, CURLOPT_POST, true);
