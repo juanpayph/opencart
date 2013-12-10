@@ -17,6 +17,7 @@ class ControllerPaymentJuanPayStandard extends Controller {
   
 	protected function index() {
                 $API_Key = $this->config->get('juanpay_standard_api_key');
+                $this->log->write('API Key : '.$API_Key);
 		$this->data['confirm_form_option'] = 'NONE'; 		
 		$md5HashData = $API_Key;
                 $this->language->load('payment/juanpay_standard');
@@ -32,8 +33,8 @@ class ControllerPaymentJuanPayStandard extends Controller {
 		if (!$this->config->get('juanpay_standard_test')) {
     		$this->data['action'] = 'https://www.juanpay.ph/checkout';
   		} else {
-			//$this->data['action'] = 'https://sandbox.juanpay.ph/checkout';
-			$this->data['action'] = 'http://localhost:3000/checkout';
+			$this->data['action'] = 'https://sandbox.juanpay.ph/checkout';
+			//$this->data['action'] = 'http://localhost:3000/checkout';
 
 		}
 
@@ -64,9 +65,13 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			if ($order_total<>$product_total) {
                             $this->data['other_fees_amt'] = $order_total - $product_total;	
                             $this->data['other_fees_name'] = "Other Fees";
-			    $md5HashData .= $this->data['other_fees_amt'];
-                            $md5HashData .= $this->data['other_fees_name'];
+			} else {
+                            $this->data['other_fees_amt'] = 0;	
+                            $this->data['other_fees_name'] = "";
 			}
+			$md5HashData .= $this->data['other_fees_amt'];
+                        $md5HashData .= $this->data['other_fees_name'];
+
 			$this->data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');	
       		        $md5HashData .= $this->data['first_name'];
 			$this->data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');	
@@ -80,7 +85,7 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			$this->data['custom'] = $this->session->data['order_id'];
       		        $md5HashData .= $this->data['custom'];
                         $this->data['hash'] = strtoupper(md5($md5HashData));
-		
+		        $this->log->write('String to hash : ' . $md5HashData);
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/juanpay_standard.tpl')) {
 				$this->template = $this->config->get('config_template') . '/template/payment/juanpay_standard.tpl';
 			} else {
