@@ -136,8 +136,8 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			if (!$this->config->get('juanpay_standard_test')) {
 				$curl = curl_init('https://www.juanpay.ph/dpn/validate');
 			} else {
-				$curl = curl_init('http://localhost:3000/dpn/validate');
-				//$curl = curl_init('https://sandbox.juanpay.ph/dpn/validate');
+				//$curl = curl_init('http://localhost:3000/dpn/validate');
+				$curl = curl_init('https://sandbox.juanpay.ph/dpn/validate');
 			}
 
 			curl_setopt($curl, CURLOPT_POST, true);
@@ -158,11 +158,11 @@ class ControllerPaymentJuanPayStandard extends Controller {
 				$this->log->write('PP_STANDARD :: DPN RESPONSE: ' . $response);
 			}
 						
-			if ((strcmp($response, 'VERIFIED') == 0 || strcmp($response, 'UNVERIFIED') == 0) && isset($this->request->post['status'])) {
+			if (strcmp($response, 'VERIFIED') == 0  && isset($this->request->post['status'])) {
 				$order_status_id = $this->config->get('config_order_status_id');
 				switch($this->request->post['status']) {
 					case 'Paid':
-						if ((strtolower($this->request->post['receiver_email']) == strtolower($this->config->get('juanpay_standard_email'))) && ((float)$this->request->post['total'] == $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false))) {
+                                                if (strtolower($this->request->post['receiver_email']) == strtolower($this->config->get('juanpay_standard_email'))) {
 							$order_status_id = $this->config->get('juanpay_standard_paid_status_id');
 						} else {
 							$this->log->write('PP_STANDARD :: RECEIVER EMAIL MISMATCH! ' . strtolower($this->request->post['receiver_email']));
@@ -170,7 +170,7 @@ class ControllerPaymentJuanPayStandard extends Controller {
 						
 						break;
 					case 'Overpaid':
-						if ((strtolower($this->request->post['receiver_email']) == strtolower($this->config->get('juanpay_standard_email'))) && ((float)$this->request->post['total'] == $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false))) {
+                                                if (strtolower($this->request->post['receiver_email']) == strtolower($this->config->get('juanpay_standard_email'))) {
 							$order_status_id = $this->config->get('juanpay_standard_overpaid_status_id');
 						} else {
 							$this->log->write('PP_STANDARD :: RECEIVER EMAIL MISMATCH! ' . strtolower($this->request->post['receiver_email']));
