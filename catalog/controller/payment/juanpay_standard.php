@@ -15,6 +15,10 @@ class ControllerPaymentJuanPayStandard extends Controller {
 		return $hashedvalue; 
 	   }
   
+           function string_sanitize($s) {
+                $result = preg_replace("/[^a-zA-Z0-9]+/", "", html_entity_decode($s, ENT_QUOTES));
+                return $result;
+           }
 	protected function index() {
                 $API_Key = $this->config->get('juanpay_standard_api_key');
                 $this->log->write('API Key : '.$API_Key);
@@ -51,12 +55,12 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			foreach ($this->cart->getProducts() as $product) {
 				$price = $this->currency->format($product['price'], $order_info['currency_code'], false, false);				
 				$this->data['products'][] = array(
-					'name'     => $product['name'],
+					'name'     => $this->string_sanitize($product['name']),
 					'price'    => $price,
 					'quantity' => $product['quantity']
 				);
                                 $product_total = $product_total + ($product['quantity'] * $price);
-      		                $md5HashData .= $product['name'];
+      		                $md5HashData .= $this->string_sanitize($product['name']);
       		                $md5HashData .= $price;
       		                $md5HashData .= $product['quantity'];
 
