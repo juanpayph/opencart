@@ -156,7 +156,7 @@ class ControllerPaymentJuanPayStandard extends Controller {
 			if (!$response) {
 				$this->log->write('PP_STANDARD :: CURL failed ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 			}
-					
+                        $response = substr($response , 0, 8);
 			if ($this->config->get('juanpay_standard_debug')) {
 				$this->log->write('PP_STANDARD :: DPN REQUEST: ' . $request);
 				$this->log->write('PP_STANDARD :: DPN RESPONSE: ' . $response);
